@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.exam.mapper.ExamScoreMapper">
+    
+    <resultMap type="ExamScore" id="ExamScoreResult">
+        <result property="id"    column="id"    />
+        <result property="examId"    column="exam_id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="subjectId"    column="subject_id"    />
+        <result property="subjectName"    column="subject_name"    />
+        <result property="ptScore"    column="pt_score"    />
+        <result property="etScore"    column="et_score"    />
+        <result property="totalScore"    column="total_score"    />
+        <result property="examDate"    column="exam_date"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectExamScoreVo">
+        select id, exam_id, student_id, student_name, subject_id, subject_name, pt_score, et_score, total_score, exam_date, create_time, update_time from exam_score
+    </sql>
+
+    <select id="selectExamScoreList" parameterType="ExamScore" resultMap="ExamScoreResult">
+        <include refid="selectExamScoreVo"/>
+        <where>  
+            <if test="examId != null "> and exam_id = #{examId}</if>
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="subjectId != null "> and subject_id = #{subjectId}</if>
+            <if test="subjectName != null  and subjectName != ''"> and subject_name like concat('%', #{subjectName}, '%')</if>
+            <if test="ptScore != null "> and pt_score = #{ptScore}</if>
+            <if test="etScore != null "> and et_score = #{etScore}</if>
+            <if test="totalScore != null "> and total_score = #{totalScore}</if>
+            <if test="examDate != null "> and exam_date = #{examDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectExamScoreById" parameterType="Long" resultMap="ExamScoreResult">
+        <include refid="selectExamScoreVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertExamScore" parameterType="ExamScore" useGeneratedKeys="true" keyProperty="id">
+        insert into exam_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="examId != null">exam_id,</if>
+            <if test="studentId != null">student_id,</if>
+            <if test="studentName != null">student_name,</if>
+            <if test="subjectId != null">subject_id,</if>
+            <if test="subjectName != null">subject_name,</if>
+            <if test="ptScore != null">pt_score,</if>
+            <if test="etScore != null">et_score,</if>
+            <if test="totalScore != null">total_score,</if>
+            <if test="examDate != null">exam_date,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="examId != null">#{examId},</if>
+            <if test="studentId != null">#{studentId},</if>
+            <if test="studentName != null">#{studentName},</if>
+            <if test="subjectId != null">#{subjectId},</if>
+            <if test="subjectName != null">#{subjectName},</if>
+            <if test="ptScore != null">#{ptScore},</if>
+            <if test="etScore != null">#{etScore},</if>
+            <if test="totalScore != null">#{totalScore},</if>
+            <if test="examDate != null">#{examDate},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExamScore" parameterType="ExamScore">
+        update exam_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="examId != null">exam_id = #{examId},</if>
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="subjectId != null">subject_id = #{subjectId},</if>
+            <if test="subjectName != null">subject_name = #{subjectName},</if>
+            <if test="ptScore != null">pt_score = #{ptScore},</if>
+            <if test="etScore != null">et_score = #{etScore},</if>
+            <if test="totalScore != null">total_score = #{totalScore},</if>
+            <if test="examDate != null">exam_date = #{examDate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExamScoreById" parameterType="Long">
+        delete from exam_score where id = #{id}
+    </delete>
+
+    <delete id="deleteExamScoreByIds" parameterType="String">
+        delete from exam_score where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

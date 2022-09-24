@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.exam.mapper.ExamWrongBookMapper">
+    
+    <resultMap type="ExamWrongBook" id="ExamWrongBookResult">
+        <result property="id"    column="id"    />
+        <result property="questionId"    column="question_id"    />
+        <result property="questionTitle"    column="question_title"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="questionCourseName"    column="question_course_name"    />
+        <result property="paperId"    column="paper_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectExamWrongBookVo">
+        select id, question_id, question_title, student_id, student_name, question_course_name, paper_id, create_time, update_time from exam_wrong_book
+    </sql>
+
+    <select id="selectExamWrongBookList" parameterType="ExamWrongBook" resultMap="ExamWrongBookResult">
+        <include refid="selectExamWrongBookVo"/>
+        <where>  
+            <if test="questionId != null "> and question_id = #{questionId}</if>
+            <if test="questionTitle != null  and questionTitle != ''"> and question_title like concat('%', #{questionTitle}, '%')</if>
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="questionCourseName != null  and questionCourseName != ''"> and question_course_name like concat('%', #{questionCourseName}, '%')</if>
+            <if test="paperId != null "> and paper_id = #{paperId}</if>
+        </where>
+    </select>
+    
+    <select id="selectExamWrongBookById" parameterType="Long" resultMap="ExamWrongBookResult">
+        <include refid="selectExamWrongBookVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertExamWrongBook" parameterType="ExamWrongBook" useGeneratedKeys="true" keyProperty="id">
+        insert into exam_wrong_book
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="questionId != null">question_id,</if>
+            <if test="questionTitle != null">question_title,</if>
+            <if test="studentId != null">student_id,</if>
+            <if test="studentName != null">student_name,</if>
+            <if test="questionCourseName != null">question_course_name,</if>
+            <if test="paperId != null">paper_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="questionId != null">#{questionId},</if>
+            <if test="questionTitle != null">#{questionTitle},</if>
+            <if test="studentId != null">#{studentId},</if>
+            <if test="studentName != null">#{studentName},</if>
+            <if test="questionCourseName != null">#{questionCourseName},</if>
+            <if test="paperId != null">#{paperId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExamWrongBook" parameterType="ExamWrongBook">
+        update exam_wrong_book
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="questionId != null">question_id = #{questionId},</if>
+            <if test="questionTitle != null">question_title = #{questionTitle},</if>
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="questionCourseName != null">question_course_name = #{questionCourseName},</if>
+            <if test="paperId != null">paper_id = #{paperId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExamWrongBookById" parameterType="Long">
+        delete from exam_wrong_book where id = #{id}
+    </delete>
+
+    <delete id="deleteExamWrongBookByIds" parameterType="String">
+        delete from exam_wrong_book where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

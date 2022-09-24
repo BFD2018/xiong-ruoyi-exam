@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.exam.mapper.ExamCoursePeriodMapper">
+    
+    <resultMap type="ExamCoursePeriod" id="ExamCoursePeriodResult">
+        <result property="id"    column="id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="name"    column="name"    />
+        <result property="duration"    column="duration"    />
+        <result property="schedule"    column="schedule"    />
+        <result property="order"    column="order"    />
+        <result property="level"    column="level"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectExamCoursePeriodVo">
+        select id, course_id, course_name, name, duration, schedule, order, level, create_time, update_time from exam_course_period
+    </sql>
+
+    <select id="selectExamCoursePeriodList" parameterType="ExamCoursePeriod" resultMap="ExamCoursePeriodResult">
+        <include refid="selectExamCoursePeriodVo"/>
+        <where>  
+            <if test="courseId != null  and courseId != ''"> and course_id = #{courseId}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="duration != null  and duration != ''"> and duration = #{duration}</if>
+            <if test="schedule != null "> and schedule = #{schedule}</if>
+            <if test="order != null "> and order = #{order}</if>
+            <if test="level != null "> and level = #{level}</if>
+        </where>
+    </select>
+    
+    <select id="selectExamCoursePeriodById" parameterType="Long" resultMap="ExamCoursePeriodResult">
+        <include refid="selectExamCoursePeriodVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertExamCoursePeriod" parameterType="ExamCoursePeriod" useGeneratedKeys="true" keyProperty="id">
+        insert into exam_course_period
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">course_id,</if>
+            <if test="courseName != null">course_name,</if>
+            <if test="name != null">name,</if>
+            <if test="duration != null">duration,</if>
+            <if test="schedule != null">schedule,</if>
+            <if test="order != null">order,</if>
+            <if test="level != null">level,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">#{courseId},</if>
+            <if test="courseName != null">#{courseName},</if>
+            <if test="name != null">#{name},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="schedule != null">#{schedule},</if>
+            <if test="order != null">#{order},</if>
+            <if test="level != null">#{level},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExamCoursePeriod" parameterType="ExamCoursePeriod">
+        update exam_course_period
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="courseName != null">course_name = #{courseName},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="schedule != null">schedule = #{schedule},</if>
+            <if test="order != null">order = #{order},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExamCoursePeriodById" parameterType="Long">
+        delete from exam_course_period where id = #{id}
+    </delete>
+
+    <delete id="deleteExamCoursePeriodByIds" parameterType="String">
+        delete from exam_course_period where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -297,6 +297,12 @@ public class SysDeptServiceImpl implements ISysDeptService
         return deptMapper.deleteDeptById(deptId);
     }
 
+    @Override
+    public List<SysDept> getAllCollege2Subject() {
+        //TODO 需要用到递归查找
+        return null;
+    }
+
     /**
      * 递归列表
      */

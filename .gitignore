@@ -20,7 +20,7 @@ target/
 .springBeans
 
 ### IntelliJ IDEA ###
-.idea
+**/.idea/**
 *.iws
 *.iml
 *.ipr
@@ -45,3 +45,5 @@ nbdist/
 !*/build/*.java
 !*/build/*.html
 !*/build/*.xml
+
+**/node_modules/**

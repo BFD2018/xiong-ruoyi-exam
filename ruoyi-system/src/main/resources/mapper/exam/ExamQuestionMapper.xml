@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.exam.mapper.ExamQuestionMapper">
+    
+    <resultMap type="ExamQuestion" id="ExamQuestionResult">
+        <result property="questionId"    column="question_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="title"    column="title"    />
+        <result property="rightAnswer"    column="right_answer"    />
+        <result property="analysis"    column="analysis"    />
+        <result property="score"    column="score"    />
+        <result property="level"    column="level"    />
+        <result property="count"    column="count"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectExamQuestionVo">
+        select question_id, course_id, course_name, title, right_answer, analysis, score, level, count, create_time, update_time from exam_question
+    </sql>
+
+    <select id="selectExamQuestionList" parameterType="ExamQuestion" resultMap="ExamQuestionResult">
+        <include refid="selectExamQuestionVo"/>
+        <where>  
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="rightAnswer != null  and rightAnswer != ''"> and right_answer like concat('%', #{rightAnswer}, '%')</if>
+            <if test="analysis != null  and analysis != ''"> and analysis = #{analysis}</if>
+            <if test="score != null "> and score = #{score}</if>
+            <if test="level != null "> and level = #{level}</if>
+            <if test="count != null "> and count = #{count}</if>
+        </where>
+    </select>
+    
+    <select id="selectExamQuestionByQuestionId" parameterType="String" resultMap="ExamQuestionResult">
+        <include refid="selectExamQuestionVo"/>
+        where question_id = #{questionId}
+    </select>
+        
+    <insert id="insertExamQuestion" parameterType="ExamQuestion" useGeneratedKeys="true" keyProperty="questionId">
+        insert into exam_question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">course_id,</if>
+            <if test="courseName != null">course_name,</if>
+            <if test="title != null">title,</if>
+            <if test="rightAnswer != null">right_answer,</if>
+            <if test="analysis != null">analysis,</if>
+            <if test="score != null">score,</if>
+            <if test="level != null">level,</if>
+            <if test="count != null">count,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">#{courseId},</if>
+            <if test="courseName != null">#{courseName},</if>
+            <if test="title != null">#{title},</if>
+            <if test="rightAnswer != null">#{rightAnswer},</if>
+            <if test="analysis != null">#{analysis},</if>
+            <if test="score != null">#{score},</if>
+            <if test="level != null">#{level},</if>
+            <if test="count != null">#{count},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExamQuestion" parameterType="ExamQuestion">
+        update exam_question
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="courseName != null">course_name = #{courseName},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="rightAnswer != null">right_answer = #{rightAnswer},</if>
+            <if test="analysis != null">analysis = #{analysis},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="count != null">count = #{count},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where question_id = #{questionId}
+    </update>
+
+    <delete id="deleteExamQuestionByQuestionId" parameterType="String">
+        delete from exam_question where question_id = #{questionId}
+    </delete>
+
+    <delete id="deleteExamQuestionByQuestionIds" parameterType="String">
+        delete from exam_question where question_id in 
+        <foreach item="questionId" collection="array" open="(" separator="," close=")">
+            #{questionId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.exam.mapper.ExamCollectMapper">
+    
+    <resultMap type="ExamCollect" id="ExamCollectResult">
+        <result property="id"    column="id"    />
+        <result property="questionId"    column="question_id"    />
+        <result property="questionTitle"    column="question_title"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectExamCollectVo">
+        select id, question_id, question_title, user_id, create_time, update_time from exam_collect
+    </sql>
+
+    <select id="selectExamCollectList" parameterType="ExamCollect" resultMap="ExamCollectResult">
+        <include refid="selectExamCollectVo"/>
+        <where>  
+            <if test="questionId != null "> and question_id = #{questionId}</if>
+            <if test="questionTitle != null  and questionTitle != ''"> and question_title like concat('%', #{questionTitle}, '%')</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+        </where>
+    </select>
+    
+    <select id="selectExamCollectById" parameterType="Long" resultMap="ExamCollectResult">
+        <include refid="selectExamCollectVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertExamCollect" parameterType="ExamCollect" useGeneratedKeys="true" keyProperty="id">
+        insert into exam_collect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="questionId != null">question_id,</if>
+            <if test="questionTitle != null">question_title,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="questionId != null">#{questionId},</if>
+            <if test="questionTitle != null">#{questionTitle},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExamCollect" parameterType="ExamCollect">
+        update exam_collect
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="questionId != null">question_id = #{questionId},</if>
+            <if test="questionTitle != null">question_title = #{questionTitle},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExamCollectById" parameterType="Long">
+        delete from exam_collect where id = #{id}
+    </delete>
+
+    <delete id="deleteExamCollectByIds" parameterType="String">
+        delete from exam_collect where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

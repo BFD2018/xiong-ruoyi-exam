@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.exam.mapper.ExamManageMapper">
+    
+    <resultMap type="ExamManage" id="ExamManageResult">
+        <result property="id"    column="id"    />
+        <result property="description"    column="description"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="course"    column="course"    />
+        <result property="paperId"    column="paper_id"    />
+        <result property="paperName"    column="paper_name"    />
+        <result property="examDate"    column="exam_date"    />
+        <result property="duration"    column="duration"    />
+        <result property="grade"    column="grade"    />
+        <result property="term"    column="term"    />
+        <result property="major"    column="major"    />
+        <result property="institute"    column="institute"    />
+        <result property="totalScore"    column="total_score"    />
+        <result property="examType"    column="exam_type"    />
+        <result property="tips"    column="tips"    />
+        <result property="organizer"    column="organizer"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectExamManageVo">
+        select id, description, course_id, course, paper_id, paper_name, exam_date, duration, grade, term, major, institute, total_score, exam_type, tips, organizer, create_time, update_time from exam_manage
+    </sql>
+
+    <select id="selectExamManageList" parameterType="ExamManage" resultMap="ExamManageResult">
+        <include refid="selectExamManageVo"/>
+        <where>  
+            <if test="description != null  and description != ''"> and description like concat('%', #{description}, '%')</if>
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="course != null  and course != ''"> and course like concat('%', #{course}, '%')</if>
+            <if test="paperId != null "> and paper_id = #{paperId}</if>
+            <if test="paperName != null  and paperName != ''"> and paper_name like concat('%', #{paperName}, '%')</if>
+            <if test="examDate != null "> and exam_date = #{examDate}</if>
+            <if test="duration != null "> and duration = #{duration}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+            <if test="term != null  and term != ''"> and term = #{term}</if>
+            <if test="major != null  and major != ''"> and major = #{major}</if>
+            <if test="institute != null  and institute != ''"> and institute = #{institute}</if>
+            <if test="totalScore != null "> and total_score = #{totalScore}</if>
+            <if test="examType != null "> and exam_type = #{examType}</if>
+            <if test="tips != null  and tips != ''"> and tips like concat('%', #{tips}, '%')</if>
+            <if test="organizer != null  and organizer != ''"> and organizer = #{organizer}</if>
+        </where>
+    </select>
+    
+    <select id="selectExamManageById" parameterType="String" resultMap="ExamManageResult">
+        <include refid="selectExamManageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertExamManage" parameterType="ExamManage" useGeneratedKeys="true" keyProperty="id">
+        insert into exam_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="description != null">description,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="course != null">course,</if>
+            <if test="paperId != null">paper_id,</if>
+            <if test="paperName != null">paper_name,</if>
+            <if test="examDate != null">exam_date,</if>
+            <if test="duration != null">duration,</if>
+            <if test="grade != null">grade,</if>
+            <if test="term != null">term,</if>
+            <if test="major != null">major,</if>
+            <if test="institute != null">institute,</if>
+            <if test="totalScore != null">total_score,</if>
+            <if test="examType != null">exam_type,</if>
+            <if test="tips != null">tips,</if>
+            <if test="organizer != null">organizer,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="description != null">#{description},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="course != null">#{course},</if>
+            <if test="paperId != null">#{paperId},</if>
+            <if test="paperName != null">#{paperName},</if>
+            <if test="examDate != null">#{examDate},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="grade != null">#{grade},</if>
+            <if test="term != null">#{term},</if>
+            <if test="major != null">#{major},</if>
+            <if test="institute != null">#{institute},</if>
+            <if test="totalScore != null">#{totalScore},</if>
+            <if test="examType != null">#{examType},</if>
+            <if test="tips != null">#{tips},</if>
+            <if test="organizer != null">#{organizer},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExamManage" parameterType="ExamManage">
+        update exam_manage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="description != null">description = #{description},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="course != null">course = #{course},</if>
+            <if test="paperId != null">paper_id = #{paperId},</if>
+            <if test="paperName != null">paper_name = #{paperName},</if>
+            <if test="examDate != null">exam_date = #{examDate},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="grade != null">grade = #{grade},</if>
+            <if test="term != null">term = #{term},</if>
+            <if test="major != null">major = #{major},</if>
+            <if test="institute != null">institute = #{institute},</if>
+            <if test="totalScore != null">total_score = #{totalScore},</if>
+            <if test="examType != null">exam_type = #{examType},</if>
+            <if test="tips != null">tips = #{tips},</if>
+            <if test="organizer != null">organizer = #{organizer},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExamManageById" parameterType="String">
+        delete from exam_manage where id = #{id}
+    </delete>
+
+    <delete id="deleteExamManageByIds" parameterType="String">
+        delete from exam_manage where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
