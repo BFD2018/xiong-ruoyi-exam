@@ -90,7 +90,7 @@
     <el-table v-loading="loading" :data="questionList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="试题编号" align="center" prop="questionId" />
-      <el-table-column label="课程名称" align="center" prop="courseName" />
+      <el-table-column label="课程名称" align="center"  width="180" prop="courseName" />
       <el-table-column label="题目" align="center" width="250" prop="title">
         <template slot-scope="scope">
           <el-input
@@ -100,21 +100,21 @@
           </el-input>
         </template>
       </el-table-column>
-      <el-table-column label="正确答案" align="center" width="80" prop="rightAnswer" />
+      <el-table-column label="正确答案" align="center" width="100" prop="rightAnswer" />
       <el-table-column label="题目解析" align="center" width="120" prop="analysis" />
       <el-table-column label="题目分数" align="center" prop="score">
         <template slot-scope="scope">
-          <el-input-number v-model="scope.row.score" :min="1" :max="100" label="请输入题目分数" size="mini"></el-input-number>
+          <el-tag type="success">{{ scope.row.score }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="难度等级" align="center" prop="level">
         <template slot-scope="scope">
-          <el-input-number v-model="scope.row.level" :min="1" :max="5" label="请输入难度等级" size="mini"></el-input-number>
+          <el-tag type="danger">{{scope.row.level}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="题目被用次数" align="center" prop="count">
+      <el-table-column label="被用次数" align="center" prop="count">
         <template slot-scope="scope">
-          <el-input-number v-model="scope.row.count" :min="0" size="mini"></el-input-number>
+          <el-tag type="warning">{{scope.row.count}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">

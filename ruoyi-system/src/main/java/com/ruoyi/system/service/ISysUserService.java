@@ -18,6 +18,7 @@ public interface ISysUserService
      */
     public List<SysUser> selectUserList(SysUser user);
 
+
     /**
      * 根据条件分页查询已分配用户角色列表
      * 
@@ -203,4 +204,6 @@ public interface ISysUserService
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+    List<SysUser> selectTeacherList(SysUser user);
 }

@@ -115,4 +115,8 @@ public interface SysDeptMapper
      * @return 结果
      */
     public int deleteDeptById(Long deptId);
+
+    List<SysDept> selectAllCollege();
+
+    List<SysDept> selectSubjectByDeptId(String college_id);
 }

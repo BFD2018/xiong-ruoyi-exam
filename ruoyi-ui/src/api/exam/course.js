@@ -8,6 +8,37 @@ export function getCollege2Subject() {
   })
 }
 
+// 根据学院id查询部门中专业
+export function getSubjectByDeptId(id) {
+  return request({
+    url: '/system/dept/subject/' + id,
+    method: 'get'
+  })
+}
+
+// 查询部门树结构列表
+export function getDeptTreeList() {
+  return request({
+    url: '/system/dept/tree/list',
+    method: 'get'
+  })
+}
+
+// 查询所有学院
+export function getCollegeList() {
+  return request({
+    url: '/system/dept/college/list',
+    method: 'get'
+  })
+}
+// 查询所有教师
+export function getTeacherList() {
+  return request({
+    url: '/system/dept/college/teacher/list',
+    method: 'get'
+  })
+}
+
 // 查询课程列表
 export function listCourse(query) {
   return request({

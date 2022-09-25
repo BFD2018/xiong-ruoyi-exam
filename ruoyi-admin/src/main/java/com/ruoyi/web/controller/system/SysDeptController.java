@@ -1,6 +1,10 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+
+import com.ruoyi.common.core.domain.TreeSelect;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +31,7 @@ import com.ruoyi.system.service.ISysDeptService;
  * 
  * @author ruoyi
  */
+@Api(description = "部门管理")
 @RestController
 @RequestMapping("/system/dept")
 public class SysDeptController extends BaseController
@@ -35,8 +40,38 @@ public class SysDeptController extends BaseController
     private ISysDeptService deptService;
 
     /**
+     * 获取学院列表 parentId=100
+     */
+    @GetMapping("/college/list")
+    public AjaxResult getAllCollege(){
+        List<SysDept> depts = deptService.getAllCollege();
+        return AjaxResult.success().put("data",depts);
+    }
+
+    /**
+     * 根据学院id 查找对应的专业
+     */
+    @GetMapping("/subject/{college_id}")
+    public AjaxResult getSubjectByDeptId(@PathVariable("college_id") String college_id){
+        List<SysDept> depts = deptService.getSubjectByDeptId(college_id);
+        return AjaxResult.success().put("data",depts);
+    }
+
+    /**
+     * 获取学院列表 parentId=100
+     */
+    @GetMapping("/tree/list")
+    public AjaxResult getDeptTreeList(SysDept dept){
+        List<TreeSelect> treeSelects = deptService.selectDeptTreeList(dept);
+        return AjaxResult.success().put("data",treeSelects);
+    }
+
+    //==============================================================================>
+
+    /**
      * 获取部门列表
      */
+    @ApiOperation("获取部门列表")
     @PreAuthorize("@ss.hasPermi('system:dept:list')")
     @GetMapping("/list")
     public AjaxResult list(SysDept dept)
@@ -48,6 +83,7 @@ public class SysDeptController extends BaseController
     /**
      * 查询部门列表（排除节点）
      */
+    @ApiOperation("查询部门列表（排除节点）")
     @PreAuthorize("@ss.hasPermi('system:dept:list')")
     @GetMapping("/list/exclude/{deptId}")
     public AjaxResult excludeChild(@PathVariable(value = "deptId", required = false) Long deptId)
@@ -60,6 +96,7 @@ public class SysDeptController extends BaseController
     /**
      * 根据部门编号获取详细信息
      */
+    @ApiOperation("根据部门编号获取详细信息")
     @PreAuthorize("@ss.hasPermi('system:dept:query')")
     @GetMapping(value = "/{deptId}")
     public AjaxResult getInfo(@PathVariable Long deptId)
@@ -71,6 +108,7 @@ public class SysDeptController extends BaseController
     /**
      * 新增部门
      */
+    @ApiOperation("新增部门")
     @PreAuthorize("@ss.hasPermi('system:dept:add')")
     @Log(title = "部门管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -87,6 +125,7 @@ public class SysDeptController extends BaseController
     /**
      * 修改部门
      */
+    @ApiOperation("修改部门")
     @PreAuthorize("@ss.hasPermi('system:dept:edit')")
     @Log(title = "部门管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -113,6 +152,7 @@ public class SysDeptController extends BaseController
     /**
      * 删除部门
      */
+    @ApiOperation("删除部门")
     @PreAuthorize("@ss.hasPermi('system:dept:remove')")
     @Log(title = "部门管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{deptId}")

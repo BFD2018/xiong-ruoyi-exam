@@ -124,4 +124,8 @@ public interface ISysDeptService
 
     List<SysDept> getAllCollege2Subject();
 
+    List<SysDept> getAllCollege();
+
+    List<SysDept> getSubjectByDeptId(String college_id);
+
 }

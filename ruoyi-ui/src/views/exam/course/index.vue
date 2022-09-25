@@ -11,23 +11,34 @@
       </el-form-item>
 
       <el-form-item label="学院名称" prop="instituteName">
-        <!--TODO  sys_dept选择学院-->
-        <el-cascader
-            :value="college"
-            :options="collegeOptions"
-            @change="handleCollegeChange"></el-cascader>
+        <el-select v-model="queryParams.instituteId" clearable  placeholder="请选择" @change="curCollegeChange">
+          <el-option
+              v-for="item in collegeOptions"
+              :key="item.deptId"
+              :label="item.deptName"
+              :value="item.deptId">
+          </el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item label="专业名称" prop="majorName">
-        <!--TODO 根据学院级联选择专业-->
-        <el-cascader
-            :value="subject"
-            :options="subjectOptions"
-            @change="handleSubjectChange"></el-cascader>
+        <el-select v-model="queryParams.majorId" clearable  placeholder="请选择">
+          <el-option
+              v-for="item in subjectOptions"
+              :key="item.deptId"
+              :label="item.deptName"
+              :value="item.deptId">
+          </el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item label="教师名称" prop="teacherName">
-        <!--TODO 查找所有教师 下拉选择-->
+        <el-input
+            v-model="queryParams.teacherName"
+            placeholder="请输入教师名称"
+            clearable
+            @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item>
@@ -132,12 +143,12 @@
           <el-input v-model="form.name" placeholder="请输入课程名称" />
         </el-form-item>
 
-        <el-form-item label="学院名称" prop="instituteName">
-          <el-input v-model="form.instituteName" placeholder="请输入学院名称" />
-        </el-form-item>
-
-        <el-form-item label="专业名称" prop="majorName">
-          <el-input v-model="form.majorName" placeholder="请输入专业名称" />
+        <el-form-item label="学院&专业" prop="instituteName">
+          <el-cascader
+              v-model="paths"
+              :props="cascaderProps"
+              :options="addFormCascaderOptions"
+              @change="handleCascaderChange"></el-cascader>
         </el-form-item>
 
         <el-form-item label="教师名称" prop="teacherName">
@@ -156,16 +167,23 @@
 </template>
 
 <script>
-import { listCourse, getCourse, delCourse, addCourse, updateCourse } from "@/api/exam/course";
+import { listCourse, getCourse, delCourse, addCourse, updateCourse,getCollegeList ,getSubjectByDeptId,getDeptTreeList} from "@/api/exam/course";
+import {listTeacher} from "@/api/system/user";
 
 export default {
   name: "Course",
   data() {
     return {
-      college:"",
-      subject:"",
-      collegeOptions:{},
-      subjectOptions:{},
+      //级联选择框属性
+      cascaderProps: {
+        value: "id",
+        label: "label",
+        children: "children"
+      },
+      addFormCascaderOptions:[],
+      paths:[],
+      collegeOptions:[],
+      subjectOptions:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -190,29 +208,40 @@ export default {
         pageSize: 10,
         name: null,
         instituteId: null,
-        instituteName: null,
         majorId: null,
-        majorName: null,
-        teacherId: null,
         teacherName: null,
-        courseBook: null,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-      }
+      },
     };
   },
   created() {
     this.getList();
+
+    this.getCollegeList();
   },
   methods: {
-    handleCollegeChange(){},
-    handleSubjectChange(){},
+    handleCascaderChange(){
+
+    },
+    curCollegeChange(){
+      getSubjectByDeptId(this.queryParams.instituteId).then(res =>{
+        this.subjectOptions = res.data
+      })
+    },
     /*分配课时*/
     handleCoursePeriod(row){
 
+    },
+    /*查询所有学院*/
+    getCollegeList(){
+      getCollegeList().then(res =>{
+        console.log(res);
+        this.collegeOptions = res.data;
+      })
     },
     /*查询所有学院及其对应的专业*/
     getAllCollege2Subject(){
@@ -270,6 +299,23 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加课程";
+
+      //请求学院-专业
+      getDeptTreeList().then(res =>{
+        //console.log(res);
+        this.addFormCascaderOptions = res.data[1].children
+      })
+
+      //学院 -> 请求 老师
+      if(this.paths[0] != undefined && this.paths[0] != "" && this.paths[0] != null){
+        let queryParams = {
+
+        }
+        listTeacher(this.addDateRange(queryParams)).then(res =>{
+          console.log(res);
+        })
+      }
+
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

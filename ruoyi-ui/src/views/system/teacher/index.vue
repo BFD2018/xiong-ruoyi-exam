@@ -4,16 +4,6 @@
       <!--部门数据-->
       <el-col :span="4" :xs="24">
         <div class="head-container">
-          <el-input
-            v-model="deptName"
-            placeholder="请输入部门名称"
-            clearable
-            size="small"
-            prefix-icon="el-icon-search"
-            style="margin-bottom: 20px"
-          />
-        </div>
-        <div class="head-container">
           <el-tree
             :data="deptOptions"
             :props="defaultProps"
@@ -30,10 +20,10 @@
       <!--用户数据-->
       <el-col :span="20" :xs="24">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="用户名称" prop="userName">
+          <el-form-item label="教师名称" prop="userName">
             <el-input
               v-model="queryParams.userName"
-              placeholder="请输入用户名称"
+              placeholder="请输入教师名称"
               clearable
               style="width: 240px"
               @keyup.enter.native="handleQuery"
@@ -139,9 +129,8 @@
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
-          <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
-          <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
+          <el-table-column label="教师编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
+          <el-table-column label="教师名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
           <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
           <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
           <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
@@ -283,19 +272,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择角色">
-                <el-option
-                  v-for="item in roleOptions"
-                  :key="item.roleId"
-                  :label="item.roleName"
-                  :value="item.roleId"
-                  :disabled="item.status == 1"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
@@ -344,13 +320,23 @@
 </template>
 
 <script>
-import { listUser, getUser, delUser, addUser, updateUser, resetUserPwd, changeUserStatus, deptTreeSelect } from "@/api/system/user";
+import {
+  listUser,
+  getUser,
+  delUser,
+  addUser,
+  updateUser,
+  resetUserPwd,
+  changeUserStatus,
+  deptTreeSelect,
+  listTeacher
+} from "@/api/system/user";
 import { getToken } from "@/utils/auth";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
-  name: "User",
+  name: "Teacher",
   dicts: ['sys_normal_disable', 'sys_user_sex'],
   components: { Treeselect },
   data() {
@@ -386,7 +372,9 @@ export default {
       // 角色选项
       roleOptions: [],
       // 表单参数
-      form: {},
+      form: {
+        roleIds:["3"]
+      },
       defaultProps: {
         children: "children",
         label: "label"
@@ -473,7 +461,7 @@ export default {
     /** 查询用户列表 */
     getList() {
       this.loading = true;
-      listUser(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      listTeacher(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
           this.userList = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -526,7 +514,7 @@ export default {
         status: "0",
         remark: undefined,
         postIds: [],
-        roleIds: []
+        roleIds: ["3"]
       };
       this.resetForm("form");
     },

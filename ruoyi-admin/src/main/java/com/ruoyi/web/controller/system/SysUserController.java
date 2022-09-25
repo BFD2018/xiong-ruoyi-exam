@@ -4,17 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.ArrayUtils;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.UserConstants;
@@ -53,6 +47,32 @@ public class SysUserController extends BaseController
 
     @Autowired
     private ISysPostService postService;
+
+    //===============================================================>
+    /**
+     * 根据角色获取用户
+     */
+    @GetMapping("/teacher/lis")
+    public TableDataInfo getUserByRole(SysUser user)
+    {
+        startPage();
+        List<SysUser> list = userService.selectTeacherList(user);
+        return getDataTable(list);
+    }
+
+    /**
+     * 获取教师列表
+     */
+    @PreAuthorize("@ss.hasPermi('system:user:list')")
+    @GetMapping("/teacher/list")
+    public TableDataInfo getTeacherList(SysUser user)
+    {
+        startPage();
+        System.out.println("user============>");
+        System.out.println(user);
+        List<SysUser> list = userService.selectTeacherList(user);
+        return getDataTable(list);
+    }
 
     /**
      * 获取用户列表

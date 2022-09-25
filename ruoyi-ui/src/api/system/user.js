@@ -10,6 +10,15 @@ export function listUser(query) {
   })
 }
 
+// 查询教师列表
+export function listTeacher(query) {
+  return request({
+    url: '/system/user/teacher/list',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询用户详细
 export function getUser(userId) {
   return request({

@@ -303,6 +303,18 @@ public class SysDeptServiceImpl implements ISysDeptService
         return null;
     }
 
+    @Override
+    public List<SysDept> getAllCollege() {
+        List<SysDept>  deptList = deptMapper.selectAllCollege();
+        return deptList;
+    }
+
+    @Override
+    public List<SysDept> getSubjectByDeptId(String college_id) {
+        List<SysDept>  deptList = deptMapper.selectSubjectByDeptId(college_id);
+        return deptList;
+    }
+
     /**
      * 递归列表
      */
