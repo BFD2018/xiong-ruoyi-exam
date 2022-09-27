@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.ArrayUtils;
@@ -50,13 +51,13 @@ public class SysUserController extends BaseController
 
     //===============================================================>
     /**
-     * 根据角色获取用户
+     * 根据请求体获取用户
      */
-    @GetMapping("/teacher/lis")
-    public TableDataInfo getUserByRole(SysUser user)
+    @GetMapping("teacher/byCollege")
+    public TableDataInfo getTeacherByCollegeId(@RequestParam("collegeId") String collegeId)
     {
         startPage();
-        List<SysUser> list = userService.selectTeacherList(user);
+        List<SysUser> list = userService.getTeacherByCollegeId(collegeId);
         return getDataTable(list);
     }
 

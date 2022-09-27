@@ -19,6 +19,14 @@ export function listTeacher(query) {
   })
 }
 
+export function getCollegeTeacherList(query){
+  return request({
+    url: '/system/user/teacher/byCollege',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询用户详细
 export function getUser(userId) {
   return request({

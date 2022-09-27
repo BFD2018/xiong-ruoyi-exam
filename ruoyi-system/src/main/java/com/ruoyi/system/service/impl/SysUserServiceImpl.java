@@ -548,4 +548,9 @@ public class SysUserServiceImpl implements ISysUserService
         user.setParams(map);
         return userMapper.selectUserListByRole(user);
     }
+
+    @Override
+    public List<SysUser> getTeacherByCollegeId(String collegeId) {
+        return userMapper.getTeacherListByCollegeId(collegeId);
+    }
 }

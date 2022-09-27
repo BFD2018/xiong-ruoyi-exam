@@ -152,7 +152,14 @@
         </el-form-item>
 
         <el-form-item label="教师名称" prop="teacherName">
-          <el-input v-model="form.teacherName" placeholder="请输入教师名称" />
+          <el-select v-model="form.teacherName" placeholder="请选择">
+            <el-option
+                v-for="item in addDialogTeacherOptions"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="配套教材" prop="courseBook">
           <el-input v-model="form.courseBook" placeholder="请输入配套教材" />
@@ -168,7 +175,7 @@
 
 <script>
 import { listCourse, getCourse, delCourse, addCourse, updateCourse,getCollegeList ,getSubjectByDeptId,getDeptTreeList} from "@/api/exam/course";
-import {listTeacher} from "@/api/system/user";
+import {getCollegeTeacherList} from "@/api/system/user";
 
 export default {
   name: "Course",
@@ -216,6 +223,7 @@ export default {
       // 表单校验
       rules: {
       },
+      addDialogTeacherOptions:[]
     };
   },
   created() {
@@ -225,7 +233,16 @@ export default {
   },
   methods: {
     handleCascaderChange(){
-
+      //学院 -> 请求 老师
+      if(this.paths[0] != undefined && this.paths[0] != "" && this.paths[0] != null){
+        let queryParams = {
+          "collegeId":this.paths[0]
+        }
+        getCollegeTeacherList(this.addDateRange(queryParams)).then(res =>{
+          console.log(res);
+          this.addDialogTeacherOptions = res.rows;
+        })
+      }
     },
     curCollegeChange(){
       getSubjectByDeptId(this.queryParams.instituteId).then(res =>{
@@ -305,17 +322,6 @@ export default {
         //console.log(res);
         this.addFormCascaderOptions = res.data[1].children
       })
-
-      //学院 -> 请求 老师
-      if(this.paths[0] != undefined && this.paths[0] != "" && this.paths[0] != null){
-        let queryParams = {
-
-        }
-        listTeacher(this.addDateRange(queryParams)).then(res =>{
-          console.log(res);
-        })
-      }
-
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
